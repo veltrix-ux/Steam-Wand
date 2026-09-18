@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steam Wand | Coffee &amp; Café in Epsom, Auckland</title>
+<meta name="description" content="Steam Wand is a cosy neighbourhood café on Manukau Road in Epsom, Auckland, serving coffee, baked treats and light meals in a warm, Japanese-inspired atmosphere.">
+<meta name="theme-color" content="#1a1512">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Steam Wand | Coffee &amp; Café in Epsom, Auckland">
+<meta property="og:description" content="A cosy neighbourhood café on Manukau Road in Epsom, Auckland, serving coffee, baked treats and light meals in a warm, Japanese-inspired atmosphere.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_NZ">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,400..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CafeOrCoffeeShop",
+  "name": "Steam Wand",
+  "image": "",
+  "priceRange": "$10-$20",
+  "servesCuisine": "Café",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "237 Manukau Road",
+    "addressLocality": "Epsom",
+    "addressRegion": "Auckland",
+    "postalCode": "1023",
+    "addressCountry": "NZ"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "134"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Friday","Saturday","Sunday","Tuesday","Wednesday"],
+      "opens": "08:30",
+      "closes": "13:30"
+    }
+  ]
+}
+</script>
+
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --ink:#1a1512;
+    --ink-soft:#241d18;
+    --cream:#f4eee3;
+    --cream-dim:#ece3d3;
+    --coffee:#4b3423;
+    --sand:#d8c7ae;
+    --sand-dim:#e6dac6;
+    --brass:#a9805a;
+    --brass-bright:#c39a6c;
+    --line:rgba(26,21,18,0.12);
+    --line-light:rgba(244,238,227,0.18);
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --maxw:1240px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001s !important; transition-duration:0.001s !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    font-weight:400;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,.display{
+    font-family:'Fraunces',Georgia,serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    margin:0;
+    color:var(--ink);
+  }
+
+  a{color:inherit; text-decoration:none;}
+  img,svg{max-width:100%; display:block;}
+  button{font-family:inherit; cursor:pointer;}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 32px;}
+  @media (max-width:640px){ .wrap{padding:0 22px;} }
+
+  .visually-hidden{
+    position:absolute; width:1px; height:1px; overflow:hidden;
+    clip:rect(0 0 0 0); white-space:nowrap;
+  }
+
+  :focus-visible{
+    outline:2px solid var(--brass);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+
+  /* grain overlay */
+  .grain{
+    position:fixed; inset:0; z-index:500; pointer-events:none;
+    opacity:0.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ============ STEAM THREAD (scroll progress) ============ */
+  .steam-thread{
+    position:fixed;
+    left:26px; top:0; bottom:0;
+    width:34px;
+    z-index:400;
+    pointer-events:none;
+    display:none;
+  }
+  @media (min-width:900px){ .steam-thread{display:block;} }
+  .steam-thread svg{height:100%; width:100%; overflow:visible;}
+  .steam-thread .track{
+    fill:none; stroke:var(--line); stroke-width:1.5;
+  }
+  .steam-thread .fill{
+    fill:none; stroke:var(--brass); stroke-width:1.5;
+    stroke-dasharray: 4000;
+    stroke-dashoffset: 4000;
+    transition: stroke-dashoffset 0.1s linear;
+  }
+  .steam-thread .bead{
+    fill:var(--cream); stroke:var(--brass); stroke-width:1.4;
+    transition: fill 0.3s var(--ease), r 0.3s var(--ease);
+  }
+  .steam-thread .bead.active{ fill:var(--brass); }
+
+  .mobile-progress{
+    position:fixed; top:0; left:0; height:2px; z-index:600;
+    background:var(--brass); width:0%;
+    transition:width .08s linear;
+  }
+
+  /* ============ NAV ============ */
+  header.nav{
+    position:fixed; top:0; left:0; right:0; z-index:300;
+    padding:26px 0;
+    transition: padding .4s var(--ease), background-color .4s var(--ease), box-shadow .4s var(--ease);
+  }
+  header.nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  header.nav.scrolled{
+    padding:14px 0;
+    background:rgba(244,238,227,0.92);
+    backdrop-filter:blur(14px);
+    box-shadow:0 1px 0 var(--line);
+  }
+  .brand{
+    font-family:'Fraunces',serif; font-weight:500;
+    font-size:17px; letter-spacing:0.03em;
+    color:var(--cream);
+    transition:color .4s var(--ease);
+    white-space:nowrap;
+  }
+  header.nav.scrolled .brand{ color:var(--ink); }
+
+  nav.primary{ display:none; gap:36px; align-items:center; }
+  @media (min-width:900px){ nav.primary{ display:flex; } }
+  nav.primary a{
+    font-size:13px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--cream); opacity:0.85;
+    position:relative; padding-bottom:4px;
+    transition:color .4s var(--ease), opacity .3s;
+  }
+  header.nav.scrolled nav.primary a{ color:var(--ink); opacity:0.72;}
+  nav.primary a::after{
+    content:""; position:absolute; left:0; right:100%; bottom:0; height:1px;
+    background:currentColor; transition:right .35s var(--ease);
+  }
+  nav.primary a:hover{ opacity:1; }
+  nav.primary a:hover::after{ right:0; }
+
+  .nav-visit{
+    display:none;
+  }
+  @media (min-width:900px){
+    .nav-visit{
+      display:inline-flex; align-items:center;
+      font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+      padding:11px 20px; border:1px solid var(--cream); border-radius:999px;
+      color:var(--cream);
+      transition:all .35s var(--ease);
+    }
+    header.nav.scrolled .nav-visit{
+      border-color:var(--ink); color:var(--ink);
+    }
+    .nav-visit:hover{ background:var(--cream); color:var(--ink); }
+    header.nav.scrolled .nav-visit:hover{ background:var(--ink); color:var(--cream); }
+  }
+
+  .burger{
+    display:flex; flex-direction:column; gap:5px; width:26px;
+    background:none; border:none; padding:6px;
+  }
+  @media (min-width:900px){ .burger{ display:none; } }
+  .burger span{
+    display:block; height:1.5px; width:100%; background:var(--cream);
+    transition:background .4s var(--ease), transform .3s var(--ease), opacity .3s var(--ease);
+  }
+  header.nav.scrolled .burger span{ background:var(--ink); }
+  .burger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+
+  .mobile-menu{
+    position:fixed; inset:0; z-index:290;
+    background:var(--ink); color:var(--cream);
+    display:flex; flex-direction:column; justify-content:center;
+    padding:0 32px;
+    transform:translateY(-100%);
+    transition:transform .5s var(--ease);
+  }
+  .mobile-menu.open{ transform:translateY(0); }
+  .mobile-menu a{
+    font-family:'Fraunces',serif; font-size:clamp(30px,9vw,44px);
+    padding:12px 0; border-bottom:1px solid var(--line-light);
+  }
+  .mobile-menu .mm-foot{
+    margin-top:28px; font-size:13px; color:var(--sand); letter-spacing:0.05em;
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative; min-height:100vh; min-height:100dvh;
+    display:flex; flex-direction:column; justify-content:flex-end;
+    background:
+      radial-gradient(ellipse 90% 60% at 30% 8%, rgba(169,128,90,0.28), transparent 55%),
+      linear-gradient(180deg, #211a15 0%, #1a1512 55%, #14100d 100%);
+    color:var(--cream);
+    overflow:hidden;
+    padding-bottom:min(9vh,72px);
+  }
+  .hero-steam{
+    position:absolute; inset:0; z-index:0; opacity:0.55;
+    mix-blend-mode:screen;
+  }
+  .hero-steam svg{ width:100%; height:100%; }
+  .hero-loc{
+    position:relative; z-index:2;
+    max-width:var(--maxw); margin:0 auto; width:100%;
+    padding:0 32px;
+    display:flex; align-items:center; gap:10px;
+    font-size:12px; letter-spacing:0.14em; color:var(--sand);
+    margin-top:auto; margin-bottom:28px;
+  }
+  @media (max-width:640px){ .hero-loc{ padding:0 22px; } }
+  .hero-loc .dot{ width:5px; height:5px; border-radius:50%; background:var(--brass-bright); }
+
+  .hero-main{
+    position:relative; z-index:2;
+    max-width:var(--maxw); margin:0 auto; width:100%;
+    padding:0 32px;
+  }
+  @media (max-width:640px){ .hero-main{ padding:0 22px; } }
+
+  .hero h1{
+    font-size:clamp(64px,14vw,168px);
+    line-height:0.92;
+    letter-spacing:-0.015em;
+    font-weight:400;
+  }
+  .hero .sub{
+    margin-top:22px; max-width:520px;
+    font-size:clamp(16px,2vw,19px);
+    color:var(--sand);
+    font-weight:400;
+  }
+  .hero .sub strong{ color:var(--cream); font-weight:500; }
+
+  .hero-ctas{
+    display:flex; flex-wrap:wrap; gap:16px; margin-top:38px;
+  }
+  .btn{
+    position:relative; display:inline-flex; align-items:center; gap:10px;
+    padding:15px 28px; border-radius:999px; font-size:12.5px;
+    letter-spacing:0.09em; text-transform:uppercase; font-weight:500;
+    border:1px solid currentColor;
+    transition:transform .25s var(--ease);
+  }
+  .btn-solid{ background:var(--cream); color:var(--ink); border-color:var(--cream); }
+  .btn-solid:hover{ background:var(--brass-bright); border-color:var(--brass-bright); color:var(--ink); }
+  .btn-ghost{ color:var(--cream); }
+  .btn-ghost:hover{ background:rgba(244,238,227,0.1); }
+
+  /* section frame */
+  section{ position:relative; }
+  .band{ padding:120px 0; }
+  @media (max-width:768px){ .band{ padding:84px 0; } }
+  .band-dark{ background:var(--ink); color:var(--cream); }
+  .eyebrow{
+    font-size:12px; letter-spacing:0.14em; color:var(--brass);
+    margin-bottom:18px; display:block;
+  }
+  .band-dark .eyebrow{ color:var(--brass-bright); }
+
+  .reveal{
+    opacity:0; transform:translateY(28px);
+    transition:opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ============ INTRO ============ */
+  .intro-grid{
+    display:grid; gap:40px;
+    grid-template-columns:1.1fr 0.9fr;
+    align-items:start;
+  }
+  @media (max-width:860px){ .intro-grid{ grid-template-columns:1fr; } }
+  .intro-head h2{
+    font-size:clamp(34px,5.4vw,56px); line-height:1.05;
+  }
+  .intro-copy{
+    margin-top:28px; max-width:440px; color:var(--coffee);
+    font-size:17px;
+  }
+  .intro-visual{
+    position:relative; margin-top:8px;
+  }
+  @media (min-width:860px){ .intro-visual{ margin-top:56px; margin-left:24px;} }
+  .art-panel{
+    aspect-ratio:4/5; border-radius:2px; overflow:hidden; position:relative;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(169,128,90,0.35), transparent 55%),
+      linear-gradient(160deg, #d8c7ae 0%, #b99a76 45%, #4b3423 100%);
+  }
+  .art-panel.short{ aspect-ratio:4/3; }
+  .art-panel svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .art-caption{
+    margin-top:14px; font-size:12.5px; color:var(--coffee); letter-spacing:0.02em;
+    opacity:0.72;
+  }
+
+  /* ============ MENU ============ */
+  .menu-head{ max-width:640px; }
+  .menu-head h2{ font-size:clamp(34px,5.4vw,54px); line-height:1.06; }
+  .menu-head p{ margin-top:20px; color:var(--coffee); font-size:17px; max-width:480px; }
+
+  .menu-cols{
+    margin-top:64px; display:grid; grid-template-columns:repeat(3,1fr); gap:2px;
+    background:var(--line);
+  }
+  @media (max-width:860px){ .menu-cols{ grid-template-columns:1fr; } }
+  .menu-col{ background:var(--cream); padding:40px 34px; }
+  .menu-col .cat{
+    font-size:12.5px; letter-spacing:0.12em; color:var(--brass);
+    display:flex; align-items:center; gap:10px; margin-bottom:26px;
+  }
+  .menu-col .cat .ico{ width:20px; height:20px; flex-shrink:0; }
+  .menu-item{
+    display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+    padding:16px 0; border-top:1px solid var(--line);
+    transition:padding-left .35s var(--ease);
+  }
+  .menu-col .menu-item:first-of-type{ border-top:none; }
+  .menu-item:hover{ padding-left:8px; }
+  .menu-item .name{ font-family:'Fraunces',serif; font-size:18px; }
+  .menu-item .ask{ font-size:11.5px; letter-spacing:0.06em; color:var(--coffee); opacity:0.55; white-space:nowrap; text-transform:uppercase; }
+
+  /* ============ SIGNATURE ============ */
+  .signature{
+    display:grid; grid-template-columns:1fr 1fr; gap:0; align-items:stretch;
+  }
+  @media (max-width:860px){ .signature{ grid-template-columns:1fr; } }
+  .sig-art{
+    background:linear-gradient(155deg,#e6dac6,#c39a6c 40%,#4b3423 100%);
+    position:relative; min-height:420px;
+  }
+  .sig-art svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .sig-text{ padding:80px 60px; display:flex; flex-direction:column; justify-content:center; }
+  @media (max-width:640px){ .sig-text{ padding:56px 26px; } }
+  .sig-text .eyebrow{ margin-bottom:10px; }
+  .sig-text h2{ font-size:clamp(30px,5vw,46px); line-height:1.06; max-width:380px; }
+  .sig-text p{ margin-top:22px; max-width:360px; color:var(--sand); font-size:17px; }
+  .sig-text .btn{ margin-top:34px; align-self:flex-start; }
+
+  /* ============ COFFEE EXPERIENCE ============ */
+  .pour-sip{ text-align:left; }
+  .pour-sip .heading{
+    font-size:clamp(40px,8vw,90px); line-height:0.98; display:flex; flex-wrap:wrap; gap:0 26px;
+  }
+  .pour-sip .heading span{ display:inline-block; }
+  .pour-grid{
+    margin-top:70px; display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:26px;
+  }
+  @media (max-width:860px){ .pour-grid{ grid-template-columns:1fr; } }
+  .cup-card{
+    position:relative; border-radius:2px; overflow:hidden; aspect-ratio:3/4;
+    background:linear-gradient(180deg,#2a221c,#1a1512);
+  }
+  .cup-card svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .cup-card .label{
+    position:absolute; left:20px; bottom:20px; font-size:13px; letter-spacing:0.08em;
+    color:var(--sand); text-transform:uppercase;
+  }
+  .cup-card:first-child{ aspect-ratio:auto; }
+  @media (min-width:860px){ .cup-card:first-child{ grid-row:span 1; } }
+
+  /* ============ VIBE ============ */
+  .vibe{ background:var(--ink); color:var(--cream); overflow:hidden; }
+  .vibe-list{ display:flex; flex-direction:column; }
+  .vibe-row{
+    display:grid; grid-template-columns:120px 1fr; gap:24px;
+    padding:38px 0; border-top:1px solid var(--line-light);
+    align-items:baseline;
+  }
+  @media (max-width:640px){ .vibe-row{ grid-template-columns:1fr; gap:8px; } }
+  .vibe-list .vibe-row:last-child{ border-bottom:1px solid var(--line-light); }
+  .vibe-row .num{ font-size:13px; color:var(--brass-bright); letter-spacing:0.08em; }
+  .vibe-row h3{
+    font-size:clamp(26px,4.4vw,42px); color:var(--cream); font-weight:400;
+  }
+  .vibe-row p{ margin-top:8px; color:var(--sand); font-size:16px; max-width:520px; }
+
+  /* ============ REVIEWS ============ */
+  .rev-head{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:24px; }
+  .rev-head h2{ font-size:clamp(34px,5.4vw,54px); }
+  .rev-score{ text-align:right; }
+  .rev-score .num{ font-family:'Fraunces',serif; font-size:52px; color:var(--brass); line-height:1; }
+  .rev-score .count{ font-size:13px; letter-spacing:0.08em; color:var(--coffee); margin-top:6px; }
+
+  .rev-track-wrap{ margin-top:56px; overflow-x:auto; padding-bottom:20px; scrollbar-width:thin; }
+  .rev-track{ display:flex; gap:24px; min-width:max-content; }
+  .rev-card{
+    width:min(88vw,420px); flex-shrink:0; background:var(--cream-dim);
+    border:1px solid var(--line); padding:34px; border-radius:2px;
+  }
+  .rev-card .stars{ color:var(--brass); font-size:15px; letter-spacing:2px; }
+  .rev-card p{ margin-top:18px; font-family:'Fraunces',serif; font-size:19px; line-height:1.4; }
+  .rev-card .who{ margin-top:22px; font-size:12.5px; letter-spacing:0.06em; color:var(--coffee); opacity:0.65; text-transform:uppercase; }
+
+  /* ============ LOCATION ============ */
+  .loc-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:0; }
+  @media (max-width:860px){ .loc-grid{ grid-template-columns:1fr; } }
+  .loc-info{ padding:90px 60px; background:var(--coffee); color:var(--cream); }
+  @media (max-width:640px){ .loc-info{ padding:60px 26px; } }
+  .loc-info h2{ color:var(--cream); font-size:clamp(32px,5vw,50px); line-height:1.05; }
+  .loc-addr{ margin-top:28px; font-size:19px; line-height:1.6; }
+  .loc-badges{ display:flex; gap:12px; margin-top:30px; flex-wrap:wrap; }
+  .loc-badge{
+    font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase;
+    border:1px solid var(--sand); padding:8px 16px; border-radius:999px; color:var(--sand);
+  }
+  .loc-ctas{ margin-top:38px; display:flex; flex-wrap:wrap; gap:14px; }
+  .loc-hours{
+    margin-top:34px; padding-top:26px; border-top:1px solid var(--line-light);
+    font-size:14px; color:var(--sand);
+  }
+  .loc-hours a{ color:var(--brass-bright); text-decoration:underline; text-underline-offset:3px; }
+  .hours-grid{ display:flex; flex-direction:column; }
+  .hours-row{
+    display:flex; justify-content:space-between; gap:20px;
+    padding:9px 0; border-top:1px solid var(--line-light);
+    font-size:14.5px;
+  }
+  .hours-row:first-child{ border-top:none; }
+  .hours-row span:first-child{ color:var(--sand); }
+  .hours-row span:last-child{ color:var(--cream); font-family:'Fraunces',serif; font-size:15.5px; }
+  .hours-row.closed span:last-child{ color:var(--sand); opacity:0.6; font-family:'Inter',sans-serif; }
+
+  .map-area{
+    position:relative; min-height:420px; background:var(--sand-dim);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .map-area svg{ position:absolute; inset:0; width:100%; height:100%; opacity:0.9; }
+  .map-pin{
+    position:relative; z-index:2; text-align:center; color:var(--coffee);
+  }
+  .map-pin .tag{
+    font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-top:14px;
+    background:var(--cream); padding:10px 18px; border-radius:999px; border:1px solid var(--line);
+    display:inline-block;
+  }
+
+  /* ============ CONTACT ============ */
+  .contact-inner{ text-align:center; max-width:640px; margin:0 auto; }
+  .contact-inner h2{ font-size:clamp(32px,5.6vw,52px); }
+  .contact-inner p{ margin-top:18px; color:var(--coffee); font-size:17px; }
+  .contact-ctas{ margin-top:38px; display:flex; flex-wrap:wrap; justify-content:center; gap:14px; }
+  .btn-outline{ border:1px solid var(--ink); color:var(--ink); }
+  .btn-outline:hover{ background:var(--ink); color:var(--cream); }
+
+  /* ============ FOOTER ============ */
+  footer{ background:var(--ink); color:var(--sand); padding:70px 0 30px; }
+  .foot-top{
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:40px;
+    padding-bottom:44px; border-bottom:1px solid var(--line-light);
+  }
+  .foot-brand{ font-family:'Fraunces',serif; font-size:24px; color:var(--cream); }
+  .foot-addr{ margin-top:14px; font-size:14px; line-height:1.7; }
+  .foot-links{ display:flex; gap:28px; flex-wrap:wrap; }
+  .foot-links a{ font-size:13px; letter-spacing:0.06em; text-transform:uppercase; opacity:0.8; }
+  .foot-links a:hover{ opacity:1; color:var(--brass-bright); }
+  .foot-bottom{
+    margin-top:28px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-size:12px; letter-spacing:0.04em; opacity:0.6;
+  }
+
+  /* magnetic button helper */
+  .magnetic{ will-change:transform; }
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="mobile-progress" id="mobileProgress" aria-hidden="true"></div>
+
+<div class="steam-thread" aria-hidden="true">
+  <svg viewBox="0 0 34 1600" preserveAspectRatio="none" id="threadSvg">
+    <path class="track" id="threadTrack" d="" />
+    <path class="fill" id="threadFill" d="" />
+  </svg>
+</div>
+
+<header class="nav" id="siteNav">
+  <div class="wrap">
+    <a href="#top" class="brand">STEAM&nbsp;WAND</a>
+    <nav class="primary" aria-label="Primary">
+      <a href="#menu">Menu</a>
+      <a href="#about">About</a>
+      <a href="#vibe">The Vibe</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
+    <a href="#visit" class="nav-visit">Visit</a>
+    <button class="burger" id="burgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#menu">Menu</a>
+  <a href="#about">About</a>
+  <a href="#vibe">The Vibe</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#visit">Visit</a>
+  <div class="mm-foot">237 Manukau Road, Epsom, Auckland</div>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-steam" aria-hidden="true">
+      <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMax slice">
+        <defs>
+          <linearGradient id="steamGrad" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#a9805a" stop-opacity="0"/>
+            <stop offset="60%" stop-color="#a9805a" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#c39a6c" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <g stroke="url(#steamGrad)" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.8">
+          <path class="steam-path" d="M 640 800 C 610 640, 690 560, 650 440 C 615 340, 700 300, 670 180" />
+          <path class="steam-path" d="M 760 800 C 800 650, 720 580, 770 460 C 810 360, 740 290, 780 160" />
+          <path class="steam-path" d="M 520 800 C 480 660, 560 590, 500 470 C 460 370, 540 300, 490 190" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero-main">
+      <h1>STEAM<br>WAND</h1>
+      <p class="sub"><strong>Coffee. Comfort. A little ritual.</strong><br>A cosy neighbourhood café in the heart of Epsom, Auckland.</p>
+      <div class="hero-ctas">
+        <a href="#menu" class="btn btn-solid magnetic">View Menu</a>
+        <a href="#visit" class="btn btn-ghost magnetic">Find Us</a>
+      </div>
+    </div>
+
+    <div class="hero-loc"><span class="dot"></span> EPSOM · AUCKLAND</div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="band" id="about">
+    <div class="wrap intro-grid">
+      <div class="intro-head reveal">
+        <span class="eyebrow">Your local coffee ritual</span>
+        <h2>Slow down.<br>Stay awhile.</h2>
+        <p class="intro-copy">Steam Wand is a cosy neighbourhood café on Manukau Road, offering carefully prepared coffee, light meals and sweet treats — and a welcoming space to relax, work, read, or catch up with friends.</p>
+      </div>
+      <div class="intro-visual reveal">
+        <div class="art-panel short">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <g fill="none" stroke="#f4eee3" stroke-width="1.4" opacity="0.55">
+              <ellipse cx="200" cy="190" rx="90" ry="26"/>
+              <path d="M120 190 C120 150 150 130 200 130 C250 130 280 150 280 190"/>
+              <path d="M170 130 L170 90 M230 130 L230 90"/>
+              <path d="M150 90 Q160 60 150 40 M250 90 Q240 60 250 40" stroke-width="1.1" opacity="0.7"/>
+            </g>
+          </svg>
+        </div>
+        <p class="art-caption">A quiet corner, a warm cup — the everyday ritual.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="band" id="menu">
+    <div class="wrap">
+      <div class="menu-head reveal">
+        <span class="eyebrow">On the counter</span>
+        <h2>Good coffee. Good food.<br>No fuss.</h2>
+        <p>A short, honest menu built around what people come back for — ask in store for today's prices and specials.</p>
+      </div>
+
+      <div class="menu-cols reveal">
+        <div class="menu-col">
+          <div class="cat">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 9h13a3 3 0 0 1 0 6h-1"/><path d="M4 9v7a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-1"/><path d="M6 5c.5 1 .5 2 0 3M10 5c.5 1 .5 2 0 3M14 5c.5 1 .5 2 0 3"/></svg>
+            Hot Drinks
+          </div>
+          <div class="menu-item"><span class="name">Espresso / Long Black / Americano</span><span class="ask">$5.0</span></div>
+          <div class="menu-item"><span class="name">Macchiato / Long Macchiato / Piccolo</span><span class="ask">$5.0</span></div>
+          <div class="menu-item"><span class="name">Flat White / Cappuccino / Latte</span><span class="ask">$5.5 / $6.0</span></div>
+          <div class="menu-item"><span class="name">Hot Chocolate</span><span class="ask">$5.5 / $6.0</span></div>
+          <div class="menu-item"><span class="name">Mocha / Matcha Latte</span><span class="ask">$6.5 / $7.0</span></div>
+          <div class="menu-item"><span class="name">Fluffy</span><span class="ask">$3.0</span></div>
+          <div class="menu-item"><span class="name">Tea</span><span class="ask">$5.5</span></div>
+        </div>
+        <div class="menu-col">
+          <div class="cat">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 3v4M12 3v4M18 3v4"/><path d="M4 9h16l-1.2 9a3 3 0 0 1-3 2.6H8.2a3 3 0 0 1-3-2.6L4 9Z"/></svg>
+            Cold Drinks
+          </div>
+          <div class="menu-item"><span class="name">Iced Americano</span><span class="ask">$5.5</span></div>
+          <div class="menu-item"><span class="name">Iced Latte / Iced Chocolate</span><span class="ask">$6.5</span></div>
+          <div class="menu-item"><span class="name">Iced Mocha / Iced Matcha Latte</span><span class="ask">$7.5</span></div>
+          <div class="menu-item"><span class="name">Orange or Apple Juice</span><span class="ask">$5.5</span></div>
+          <div class="menu-item" style="border-top:1px solid var(--line); margin-top:6px; padding-top:20px;"><span class="name" style="font-family:'Inter',sans-serif; font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; opacity:.6;">Add non-dairy milk</span><span class="ask">$1.0</span></div>
+          <div class="menu-item"><span class="name" style="font-family:'Inter',sans-serif; font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; opacity:.6;">Add vanilla, hazelnut or caramel</span><span class="ask">$0.5</span></div>
+          <div class="menu-item"><span class="name" style="font-family:'Inter',sans-serif; font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; opacity:.6;">Whipped or pouring cream, decaf</span><span class="ask">Ask in store</span></div>
+        </div>
+        <div class="menu-col">
+          <div class="cat">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M5 8h14l-1.5 10a2 2 0 0 1-2 1.7H8.5a2 2 0 0 1-2-1.7L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+            From the Kitchen
+          </div>
+          <div class="menu-item"><span class="name">Creamy Corn Soup with Cheese Scone</span><span class="ask">$14</span></div>
+          <div class="menu-item"><span class="name">Toasted Sandwich — Ham &amp; Cheese</span><span class="ask">Ask in store</span></div>
+          <div class="menu-item"><span class="name">Toasted Sandwich — Tuna, Mayo &amp; Olive</span><span class="ask">Ask in store</span></div>
+          <div class="menu-item"><span class="name">Toasted Sandwich — Egg Salad</span><span class="ask">Ask in store</span></div>
+          <div class="menu-item"><span class="name">Home Baked Cookies — 10 flavours</span><span class="ask">Ask in store</span></div>
+          <p style="margin:18px 0 0; font-size:12px; color:var(--coffee); opacity:0.6;">Kitchen served 8:30am–2:00pm (1:00pm weekends).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE -->
+  <section class="signature">
+    <div class="sig-art reveal">
+      <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g fill="none" stroke="#f4eee3" stroke-width="1.6" opacity="0.6">
+          <path d="M150 300 A100 40 0 1 0 350 300 A100 40 0 1 0 150 300 Z"/>
+          <path d="M160 290 Q200 260 250 285 Q300 260 340 290" stroke-width="1.1"/>
+          <path d="M180 300 L185 310 M230 296 L233 308 M270 298 L273 310 M310 296 L316 308" stroke-width="1"/>
+        </g>
+      </svg>
+    </div>
+    <div class="sig-text reveal">
+      <span class="eyebrow">The signature</span>
+      <h2>Baked for the moment.</h2>
+      <p>Something simple, comforting, and made for enjoying with your coffee. Paired with our creamy corn soup for $14, it's what regulars order without opening the menu.</p>
+      <a href="#menu" class="btn btn-outline magnetic" style="border-color:var(--cream); color:var(--cream);">Explore the Menu</a>
+    </div>
+  </section>
+
+  <!-- COFFEE EXPERIENCE -->
+  <section class="band band-dark pour-sip">
+    <div class="wrap">
+      <div class="heading reveal">
+        <span>POUR.</span><span>SIP.</span><span>STAY.</span>
+      </div>
+      <div class="pour-grid">
+        <div class="cup-card reveal">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <g fill="none" stroke="#a9805a" stroke-width="1.5" opacity="0.75">
+              <ellipse cx="150" cy="300" rx="80" ry="20"/>
+              <path d="M70 300 C70 260 100 240 150 240 C200 240 230 260 230 300"/>
+              <path d="M110 240 Q100 200 120 170 M150 240 Q145 190 165 150 M190 240 Q195 200 175 170" stroke-width="1"/>
+            </g>
+          </svg>
+          <div class="label">Oat Flat White</div>
+        </div>
+        <div class="cup-card reveal">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <g fill="none" stroke="#c39a6c" stroke-width="1.5" opacity="0.7">
+              <circle cx="150" cy="200" r="70"/>
+              <path d="M150 140 A60 60 0 0 1 210 200"/>
+              <path d="M120 150 Q150 165 180 150" stroke-width="1"/>
+            </g>
+          </svg>
+          <div class="label">Cappuccino</div>
+        </div>
+        <div class="cup-card reveal">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <g fill="none" stroke="#d8c7ae" stroke-width="1.4" opacity="0.65">
+              <rect x="90" y="120" width="120" height="160" rx="8"/>
+              <path d="M100 150 h100 M100 180 h100 M100 210 h70" stroke-width="1"/>
+            </g>
+          </svg>
+          <div class="label">Slow Mornings</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIBE -->
+  <section class="band vibe" id="vibe">
+    <div class="wrap">
+      <span class="eyebrow reveal">The vibe</span>
+      <div class="vibe-list">
+        <div class="vibe-row reveal">
+          <span class="num">01</span>
+          <div><h3>Cosy</h3><p>A comfortable neighbourhood atmosphere, carefully decorated down to the last detail.</p></div>
+        </div>
+        <div class="vibe-row reveal">
+          <span class="num">02</span>
+          <div><h3>Japanese-Inspired</h3><p>A distinctive Japanese influence runs through the space — quiet, considered, uncluttered.</p></div>
+        </div>
+        <div class="vibe-row reveal">
+          <span class="num">03</span>
+          <div><h3>Local</h3><p>A welcoming place where regulars and newcomers can feel equally at home.</p></div>
+        </div>
+        <div class="vibe-row reveal">
+          <span class="num">04</span>
+          <div><h3>Work · Read · Relax</h3><p>A comfortable environment for coffee, conversation, or getting some work done.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="band" id="reviews">
+    <div class="wrap">
+      <div class="rev-head reveal">
+        <h2>Loved by locals.</h2>
+        <div class="rev-score">
+          <div class="num">4.9</div>
+          <div class="count">134 reviews</div>
+        </div>
+      </div>
+      <div class="rev-track-wrap reveal">
+        <div class="rev-track">
+          <div class="rev-card">
+            <div class="stars">★★★★★</div>
+            <p>"This is an awesome lovely little cafe, carefully decorated very kind and welcoming staff."</p>
+            <div class="who">Google review</div>
+          </div>
+          <div class="rev-card">
+            <div class="stars">★★★★★</div>
+            <p>"A cute and cosy cafe, providing a place to relax, chat or read a book — all while enjoying a good cuppa with something sweet."</p>
+            <div class="who">Google review</div>
+          </div>
+          <div class="rev-card">
+            <div class="stars">★★★★★</div>
+            <p>"Excellent service and very clean. A Japanese owner giving off a very Japanese style."</p>
+            <div class="who">Google review</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section id="visit">
+    <div class="loc-grid">
+      <div class="loc-info reveal">
+        <h2>Come find us.</h2>
+        <div class="loc-addr">237 Manukau Road<br>Epsom, Auckland 1023<br>New Zealand</div>
+        <div class="loc-badges">
+          <span class="loc-badge">Dine-in</span>
+          <span class="loc-badge">Takeaway</span>
+        </div>
+        <div class="loc-ctas">
+          <a class="btn btn-solid magnetic" href="https://www.google.com/maps/search/?api=1&query=237+Manukau+Road+Epsom+Auckland+1023" target="_blank" rel="noopener">Get Directions</a>
+        </div>
+        <div class="loc-hours">
+          <div class="hours-grid">
+            <div class="hours-row closed"><span>Monday</span><span>Closed</span></div>
+            <div class="hours-row"><span>Tuesday</span><span>8:30am – 1:30pm</span></div>
+            <div class="hours-row"><span>Wednesday</span><span>8:30am – 1:30pm</span></div>
+            <div class="hours-row closed"><span>Thursday</span><span>Closed</span></div>
+            <div class="hours-row"><span>Friday</span><span>8:30am – 1:30pm</span></div>
+            <div class="hours-row"><span>Saturday</span><span>8:30am – 1:30pm</span></div>
+            <div class="hours-row"><span>Sunday</span><span>8:30am – 1:30pm</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="map-area reveal">
+        <svg viewBox="0 0 600 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <g stroke="#4b3423" stroke-width="1" opacity="0.35" fill="none">
+            <line x1="0" y1="120" x2="600" y2="100"/>
+            <line x1="0" y1="260" x2="600" y2="250"/>
+            <line x1="0" y1="380" x2="600" y2="400"/>
+            <line x1="140" y1="0" x2="120" y2="500"/>
+            <line x1="380" y1="0" x2="400" y2="500"/>
+          </g>
+        </svg>
+        <div class="map-pin">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#4b3423" stroke-width="1.4"><path d="M12 21s7-6.7 7-12a7 7 0 0 0-14 0c0 5.3 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>
+          <div class="tag">237 Manukau Rd, Epsom</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="band">
+    <div class="wrap contact-inner reveal">
+      <h2>Questions? Come say hi.</h2>
+      <p>We're best reached in person on Manukau Road — drop by any time we're open.</p>
+      <div class="contact-ctas">
+        <a class="btn btn-outline magnetic" href="https://www.google.com/maps/search/?api=1&query=237+Manukau+Road+Epsom+Auckland+1023" target="_blank" rel="noopener">Google Maps</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand">Steam Wand</div>
+        <div class="foot-addr">237 Manukau Road<br>Epsom, Auckland 1023<br>New Zealand</div>
+      </div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="#menu">Menu</a>
+        <a href="#about">About</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#visit">Visit</a>
+      </nav>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Steam Wand</span>
+      <span>Epsom · Auckland</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // NAV scroll state
+  var nav = document.getElementById('siteNav');
+  function onScroll(){
+    if(window.scrollY > 40){ nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // mobile menu
+  var burger = document.getElementById('burgerBtn');
+  var mmenu = document.getElementById('mobileMenu');
+  function closeMenu(){
+    mmenu.classList.remove('open');
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded','false');
+  }
+  burger.addEventListener('click', function(){
+    var open = mmenu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true':'false');
+  });
+  mmenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
+
+  // reveal on scroll
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // scroll progress (steam thread + mobile bar)
+  var track = document.getElementById('threadTrack');
+  var fill = document.getElementById('threadFill');
+  var svgEl = document.getElementById('threadSvg');
+  var mobileBar = document.getElementById('mobileProgress');
+
+  function buildPath(h){
+    // gentle wavy vertical path resembling rising steam
+    var pts = [];
+    var steps = 24;
+    for(var i=0;i<=steps;i++){
+      var y = (h/steps)*i;
+      var x = 17 + Math.sin(i*0.9) * 7;
+      pts.push([x,y]);
+    }
+    var d = 'M ' + pts[0][0] + ' ' + pts[0][1];
+    for(var j=1;j<pts.length;j++){ d += ' L ' + pts[j][0] + ' ' + pts[j][1]; }
+    return d;
+  }
+
+  function sizeThread(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var viewH = Math.max(h, 800);
+    svgEl.setAttribute('viewBox','0 0 34 '+viewH);
+    var d = buildPath(viewH);
+    track.setAttribute('d', d);
+    fill.setAttribute('d', d);
+    var len = fill.getTotalLength ? fill.getTotalLength() : viewH;
+    fill.style.strokeDasharray = len;
+    fill.style.strokeDashoffset = len;
+    fill.dataset.len = len;
+  }
+
+  function updateProgress(){
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var pct = max > 0 ? (window.scrollY / max) : 0;
+    pct = Math.min(Math.max(pct,0),1);
+    mobileBar.style.width = (pct*100) + '%';
+    if(fill.dataset.len){
+      var len = parseFloat(fill.dataset.len);
+      fill.style.strokeDashoffset = len - (len*pct);
+    }
+  }
+
+  window.addEventListener('resize', sizeThread);
+  document.addEventListener('scroll', updateProgress, {passive:true});
+  sizeThread();
+  updateProgress();
+
+  // magnetic buttons (desktop only, subtle)
+  if(window.matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('.magnetic').forEach(function(btn){
+      btn.addEventListener('mousemove', function(e){
+        var r = btn.getBoundingClientRect();
+        var mx = e.clientX - r.left - r.width/2;
+        var my = e.clientY - r.top - r.height/2;
+        btn.style.transform = 'translate(' + (mx*0.12) + 'px,' + (my*0.22) + 'px)';
+      });
+      btn.addEventListener('mouseleave', function(){
+        btn.style.transform = 'translate(0,0)';
+      });
+    });
+  }
+
+  // gentle parallax on hero steam
+  var heroSteam = document.querySelector('.hero-steam');
+  document.addEventListener('scroll', function(){
+    if(heroSteam){
+      var y = window.scrollY;
+      heroSteam.style.transform = 'translateY(' + (y*0.15) + 'px)';
+    }
+  }, {passive:true});
+
+})();
+</script>
+
+</body>
+</html>
